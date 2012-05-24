@@ -1,0 +1,18 @@
+%{
+#include <stdio.h>
+#include <string.h>
+
+#include "cp.h"
+
+
+%}
+
+
+struct cp { char *name; cmdhandler cb; };
+%%
+add_entry, add_rule_class_entry 
+del_entry, del_rule_class_entry 
+show_counter, show_port_counter  
+%%
+
+

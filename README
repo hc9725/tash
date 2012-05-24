@@ -1,0 +1,8 @@
+gramma:
+
+	cmd key=value...
+
+	cmd,key:char *
+	value=int, char*
+
+
