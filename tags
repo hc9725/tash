@@ -9,7 +9,7 @@ ALIGN	dict/dict.c	413;"	d	file:
 APP_H	app.h	2;"	d
 APP_TPI_H	app_tpi.h	2;"	d
 ARGPARSE_H	argparse.h	2;"	d
-CFLAGS	Makefile	/^CFLAGS= -Wall -O2 -D_GNU_SOURCE -DNOREADLINE$/;"	m
+CFLAGS	Makefile	/^CFLAGS= -Wall -O2 -D_GNU_SOURCE -DREADLINE$/;"	m
 CFLAGS	dict/Makefile	/^CFLAGS = -O3 -g -I. -Wall -pedantic $(EXTRA)$/;"	m
 CFLAGS	ragel-pgn/Makefile	/^CFLAGS=-O2 -Wall$/;"	m
 DEBUG	dict.c	37;"	d	file:
@@ -21,6 +21,10 @@ DICT_MIN_SZ	dict/dict.c	23;"	d	file:
 DUMMY_PTR	dict.c	26;"	d	file:
 DUMMY_PTR	dict/dict.c	26;"	d	file:
 LIB	Makefile	/^LIB= ragel-pgn\/libpgn.a -lreadline -ltermcap $/;"	m
+MAX_HASH_VALUE	cp.c	47;"	d	file:
+MAX_WORD_LENGTH	cp.c	45;"	d	file:
+MIN_HASH_VALUE	cp.c	46;"	d	file:
+MIN_WORD_LENGTH	cp.c	44;"	d	file:
 NKEYS	dict.c	414;"	d	file:
 NKEYS	dict/dict.c	414;"	d	file:
 NO	argparse.h	/^	NO = 0,$/;"	e	enum:force
@@ -39,6 +43,8 @@ OPT_STRING	argparse.h	22;"	d
 PERTURB_SHIFT	dict.c	28;"	d	file:
 PERTURB_SHIFT	dict/dict.c	28;"	d	file:
 PGN_H_	ragel-pgn/pgn.h	2;"	d
+STRUTIL_H	strutil.c	2;"	d	file:
+TOTAL_KEYWORDS	cp.c	43;"	d	file:
 YES	argparse.h	/^	YES = 1,$/;"	e	enum:force
 _DICT_H_	dict.h	16;"	d
 _DICT_H_	dict/dict.h	16;"	d
@@ -62,10 +68,12 @@ argparse_option	argparse.h	/^struct argparse_option$/;"	s
 argparse_option_type	argparse.h	/^enum argparse_option_type {$/;"	g
 argparse_parse	argparse.c	/^int argparse_parse(struct argparse_option *options, dict *d)$/;"	f
 buf	scli.c	/^char buf[1024];$/;"	v
+cb	cp.c	/^struct cp { char *name; cmdhandler cb; };$/;"	m	struct:cp	file:
 cb	cp.h	/^cmdhandler cb;$/;"	v
 cb	main.c	/^struct cp { char *name; cmdhandler cb; };$/;"	m	struct:cp	file:
 ce	app.h	/^struct ce {$/;"	s
 cmdhandler	cp.h	/^typedef int (*cmdhandler) ( void * );$/;"	t
+cp	cp.c	/^struct cp { char *name; cmdhandler cb; };$/;"	s	file:
 cp	main.c	/^struct cp { char *name; cmdhandler cb; };$/;"	s	file:
 def_value	argparse.h	/^	void *def_value;\/\/缺省值$/;"	m	struct:argparse_option
 del_rule_class_entry	app.c	/^int del_rule_class_entry(struct ce *ce)$/;"	f
@@ -99,17 +107,18 @@ dip	app.h	/^int dip;$/;"	m	struct:ce
 do_rqst	main.c	/^void do_rqst(char *s)$/;"	f
 dport	app.h	/^int dport;$/;"	m	struct:ce
 end	ragel-pgn/pgn.c	/^    tag_pair *end;$/;"	m	struct:__anon1	file:
-end	ragel-pgn/pgn.c	/^    tag_pair *end;$/;"	m	struct:__anon2	file:
 epoch_double	dict.c	/^double epoch_double()$/;"	f
 epoch_double	dict/dict.c	/^double epoch_double()$/;"	f
 fill	dict.h	/^    unsigned  fill ;$/;"	m	struct:_dict_
 fill	dict/dict.h	/^    unsigned  fill ;$/;"	m	struct:_dict_
+findcp	cp.c	/^findcp (register const char *str, register unsigned int len)$/;"	f
 force	argparse.h	/^	enum force  force;\/\/是否可以为空$/;"	m	struct:argparse_option	typeref:enum:argparse_option::force
 force	argparse.h	/^enum force {$/;"	g
 get_dict_int	argparse.c	/^int get_dict_int(void *dict, char* s, int* n)$/;"	f
 get_dict_int64	argparse.c	/^int64 get_dict_int64(void *dict, char* s, int64* n)$/;"	f
 get_dict_ip	argparse.c	/^int  get_dict_ip(void *dict, char *s,int *ip)$/;"	f
 get_dict_str	argparse.c	/^int get_dict_str(void *dict, char* s, char* des_str)$/;"	f
+hash	cp.c	/^hash (register const char *str, register unsigned int len)$/;"	f	file:
 hash	dict.h	/^    unsigned  hash ;$/;"	m	struct:_keypair_
 hash	dict/dict.h	/^    unsigned  hash ;$/;"	m	struct:_keypair_
 int64	app.h	/^typedef unsigned long long int int64;$/;"	t
@@ -125,11 +134,11 @@ main	main.c	/^int main()$/;"	f
 main	ragel-pgn/test.c	/^int main() {$/;"	f
 main	test.c	/^main()$/;"	f
 name	argparse.h	/^	char *name;\/\/名$/;"	m	struct:argparse_option
+name	cp.c	/^struct cp { char *name; cmdhandler cb; };$/;"	m	struct:cp	file:
 name	main.c	/^struct cp { char *name; cmdhandler cb; };$/;"	m	struct:cp	file:
 name	ragel-pgn/pgn.c	/^    char name[256];$/;"	m	struct:tag_pair_t	file:
 next	ragel-pgn/pgn.c	/^    struct tag_pair_t *next;$/;"	m	struct:tag_pair_t	typeref:struct:tag_pair_t::tag_pair_t	file:
 options	argparse.h	/^	struct argparse_option *options;$/;"	m	struct:argparse	typeref:struct:argparse::argparse_option
-parse_kvstring	strutil.c	/^int parse_kvstring( char *s, dict *d )$/;"	f
 pgn_en_main	ragel-pgn/pgn.c	/^static const int pgn_en_main = 1;$/;"	v	file:
 pgn_error	ragel-pgn/pgn.c	/^static const int pgn_error = 0;$/;"	v	file:
 pgn_first_final	ragel-pgn/pgn.c	/^static const int pgn_first_final = 6;$/;"	v	file:
@@ -146,12 +155,9 @@ size	dict.h	/^    unsigned  size ;$/;"	m	struct:_dict_
 size	dict/dict.h	/^    unsigned  size ;$/;"	m	struct:_dict_
 sport	app.h	/^int sport;$/;"	m	struct:ce
 start	ragel-pgn/pgn.c	/^    tag_pair *start;$/;"	m	struct:__anon1	file:
-start	ragel-pgn/pgn.c	/^    tag_pair *start;$/;"	m	struct:__anon2	file:
-str_next	strutil.c	/^char *str_next(char *s,int *length)$/;"	f
 table	dict.h	/^    keypair * table ;$/;"	m	struct:_dict_
 table	dict/dict.h	/^    keypair * table ;$/;"	m	struct:_dict_
 tag_list	ragel-pgn/pgn.c	/^} tag_list;$/;"	t	typeref:struct:__anon1	file:
-tag_list	ragel-pgn/pgn.c	/^} tag_list;$/;"	t	typeref:struct:__anon2	file:
 tag_pair	ragel-pgn/pgn.c	/^} tag_pair;$/;"	t	typeref:struct:tag_pair_t	file:
 tag_pair_t	ragel-pgn/pgn.c	/^typedef struct tag_pair_t {$/;"	s	file:
 tpi_add_rule_class_entry	app_tpi.c	/^int tpi_add_rule_class_entry(void * dict)$/;"	f
@@ -166,5 +172,6 @@ val	dict.h	/^    char    * val ;$/;"	m	struct:_keypair_
 val	dict/dict.h	/^    char    * val ;$/;"	m	struct:_keypair_
 value	argparse.h	/^	void *value;\/\/值$/;"	m	struct:argparse_option
 value	ragel-pgn/pgn.c	/^    char *value;$/;"	m	struct:tag_pair_t	file:
+wordlist	cp.c	/^static const struct cp wordlist[] =$/;"	v	typeref:struct:cp	file:
 xstrdup	dict.c	/^static char * xstrdup(char * s)$/;"	f	file:
 xstrdup	dict/dict.c	/^static char * xstrdup(char * s)$/;"	f	file:
