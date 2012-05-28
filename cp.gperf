@@ -10,9 +10,9 @@
 
 struct cp { char *name; cmdhandler cb; };
 %%
-add_entry, add_rule_class_entry 
-del_entry, del_rule_class_entry 
-show_counter, show_port_counter  
+add_entry, tpi_add_rule_class_entry 
+del_entry, tpi_del_rule_class_entry 
+show_counter, tpi_show_port_counter  
 %%
 
 

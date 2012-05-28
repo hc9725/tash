@@ -6,7 +6,7 @@ LIB= ragel-pgn/libpgn.a -lreadline -ltermcap
 
 all: main
 
-main: main.o scli.o strutil.o dict.o app.o
+main: main.o scli.o strutil.o dict.o argparse.o app.o app_tpi.o argparse.o cp.o
 	cc -o main $^ $(LIB)
 
 cp.c:cp.gperf

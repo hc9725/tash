@@ -8,6 +8,9 @@
 #include "dict.h"
 #include "cp.h"
 #include "app.h"
+#include "argparse.h"
+
+struct cp { char *name; cmdhandler cb; };
 
 void do_rqst(char *s)
 {
@@ -27,16 +30,10 @@ void do_rqst(char *s)
 	d = dict_new();
 
 	parse_kvstring( p, d );
-
-	//struct cp* cp;
-	//if ( (cp=findcp(cmd, n )) != NULL )
-	//	cp->cb( d );
-
-
-	//dict_dump( d , stdout );
-
-	add_rule_class_entry(d);
-	show_port_counter(d);
+	const struct cp* cp;
+	if ( (cp=findcp(cmd, n )) != NULL ) {
+		cp->cb( (void *)d );
+	}
 
 	dict_free( d );
 

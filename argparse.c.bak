@@ -1,0 +1,131 @@
+
+#include <stdio.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <memory.h>
+#include "app.h"
+
+#include "dict.h"
+#include "argparse.h"
+
+
+int64 get_dict_int64(void *dict, char* s, int64* n)
+{
+	char *endptr;
+	
+	char *str =  dict_get(dict, s, NULL);	
+	if(str != NULL){
+		*n = strtoull(str, &endptr,0);
+		return 0;		
+	}
+	return -1;
+}
+
+int get_dict_int(void *dict, char* s, int* n)
+{
+	char *endptr;
+	
+	char *str =  dict_get(dict, s, NULL);	
+	if(str != NULL){
+		*n = strtol(str, &endptr,0);
+		return 0;		
+	}
+	return -1;
+}
+
+int get_dict_str(void *dict, char* s, char* des_str)
+{
+	char *str =  dict_get(dict, s, NULL);	
+	if(str != NULL){
+		*des_str = *str;
+		return 0;		
+	}
+	return -1;
+}
+
+int  get_dict_ip(void *dict, char *s,int *ip)
+{
+	struct in_addr addr;
+	char *str =  dict_get(dict, s, NULL);
+	if(inet_aton(str, &addr) == 0){
+		fprintf(stderr,"A  wrong ip.");
+		return -1;
+	}
+	*ip = addr.s_addr;
+
+	return 0;
+}
+
+int argparse_init(struct argparse *old_options, struct argparse_option *options)
+{
+	memset(old_options, 0,sizeof(*old_options));
+	old_options->options = options;
+	return 0;
+}
+
+
+int argparse_parse(struct argparse *argparse, char * s, dict *d)
+{
+	int i;
+	struct argparse_option *opts;
+	opts = argparse->options;
+	
+	for(; opts->type != OPTION_END; opts++){
+		printf("opts->name:%s\n s:%s\n",opts->name,s);
+		printf("opts->type:%d\n",opts->type);
+		switch(opts->type){
+			case OPTION_END: 
+				break;
+				
+			case OPTION_BOOLEAN:
+				break;
+
+			case OPTION_INTEGER:{
+				fprintf(stderr, " %s %d \n", __FILE__, __LINE__ );
+				if(strcmp(opts->name, s) == 1){
+					if(opts->def_value)
+						opts->value = opts->def_value;
+					i = get_dict_int(d, s, (int *)opts->value);
+					if(i == -1)
+						fprintf(stderr, "get dict int worng");
+					if(opts->must_have == 1 && opts->value)
+						fprintf(stderr,"%s's value can't be NULL",opts->name);
+					}
+				}
+				break;
+			
+			
+			case OPTION_STRING:{
+				fprintf(stderr, " %s %d \n", __FILE__, __LINE__ );
+				printf("opts->name:%s\n s:%s\n",opts->name,s);
+				if(strcmp(opts->name, s) == 1){
+					if(opts->def_value)
+						opts->value = opts->def_value;
+					i = get_dict_str(d, s, (char *)opts->value);
+					if(i == -1)
+						fprintf(stderr, "get dict int worng");
+					if(opts->must_have == 1 && opts->value)
+						fprintf(stderr,"%s's value can't be NULL",opts->name);
+					}
+				}
+				break;
+			case OPTION_IP: {
+				fprintf(stderr, " %s %d \n", __FILE__, __LINE__ );
+				if(strcmp(opts->name, s) == 1){
+					if(!opts->def_value)
+						opts->value = opts->def_value;
+					i = get_dict_ip(d, s,(int *)opts->value);
+					if(i == -1)
+						fprintf(stderr, "get dict int worng");
+					if(opts->must_have == 1 && opts->value)
+						fprintf(stderr,"%s's value can't be NULL",opts->name);
+					}
+				}
+				break;
+			default:
+				fprintf(stderr, "wrong option type: %d\n",opts->type);
+		}
+	}
+	return 0;		
+}
