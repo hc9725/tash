@@ -3,8 +3,8 @@
 
 #include <netdb.h>
 
-#include "strutil.h"
 #include "scli.h"
+#include "strutil.h"
 #include "dict.h"
 #include "cp.h"
 #include "app.h"
@@ -14,9 +14,10 @@ struct cp { char *name; cmdhandler cb; };
 
 void do_rqst(char *s)
 {
+	int n;
 	char *p = s;
 	char *cmd = NULL;
-	int n;
+	const struct cp* cp;
 	dict *d;
 
 	p = str_next(s, &n);
@@ -30,7 +31,6 @@ void do_rqst(char *s)
 	d = dict_new();
 
 	parse_kvstring( p, d );
-	const struct cp* cp;
 	if ( (cp=findcp(cmd, n )) != NULL ) {
 		cp->cb( (void *)d );
 	}

@@ -1,5 +1,10 @@
 #ifndef ARGPARSE_H
 #define ARGPARSE_H
+enum force {
+	NO = 0,
+	YES = 1,
+};
+
 enum argparse_option_type {
         OPTION_END,
 	OPTION_BOOLEAN,
@@ -24,7 +29,7 @@ struct argparse_option
 	char *key;
 	void *value;//值
 	void *def_value;//缺省值
-	int  force;//是否可以为空
+	enum force  force;//是否可以为空
 };
 
  struct argparse
@@ -38,5 +43,6 @@ int64 get_dict_int64(void *dict, char* s, int64* n);
 int get_dict_int(void *dict, char* s, int* n);
 int get_dict_str(void *dict, char* s, char* des_str);
 int  get_dict_ip(void *dict, char *s,int *ip);
-int argparse_parse(struct argparse *argparse, dict *d);
+int argparse_parse(struct argparse_option *options, dict *d);
+//int argparse_parse(struct argparse *argparse, dict *d);
 #endif

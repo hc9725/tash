@@ -57,61 +57,60 @@ int  get_dict_ip(void *dict, char *s,int *ip)
 }
 
 
-//int argparse_parse(struct argparse *argps, dict *d)
-int argparse_parse(struct argparse_option *options, dict *d)
+int argparse_parse(struct argparse *argps, dict *d)
 {
 	int i;
 	char *str_k;
-	for(; options->type != OPTION_END; options++){
-		str_k = options->key;
-		switch(options->type){
+	for(; argps->options->type != OPTION_END; argps->options++){
+		str_k = argps->options->key;
+		switch(argps->options->type){
 			case OPTION_INTEGER:{
-				i = get_dict_int(d, str_k, (int *)options->value);
+				i = get_dict_int(d, str_k, (int *)argps->options->value);
 				if(i == -1){
-					if(options->def_value){
-						*(int *)options->value = *(int *)options->def_value;
+					if(argps->options->def_value){
+						*(int *)argps->options->value = *(int *)argps->options->def_value;
 						return 1;
 					}
-					else if(options->force == NO)  
+					else if(argps->options->force == 1)  
 						return -1; // return -1: 	no key/value in the dict & no def_value.
 					else return 2;//return 2: the value is NULL 
 				}
 			} break;
 
 			case OPTION_STRING:{
-				i = get_dict_str(d, str_k, (char *)options->value);
+				i = get_dict_str(d, str_k, (char *)argps->options->value);
 				if(i == -1){
-					if(options->def_value){
-						*(char *)options->value = *(char *)options->def_value;
+					if(argps->options->def_value){
+						*(char *)argps->options->value = *(char *)argps->options->def_value;
 					return 1; // return 1 : no key/value in the dict, using the def_value
 					}
-					else if(options->force == NO) 
+					else if(argps->options->force == 1) 
 						return -1; // return -1: 	no key/value in the dict & no def_value.
 					else return 2;//return 2: the value is NULL 
 				}
 			} break;
 
 			case OPTION_IP: {
-				i = get_dict_ip(d, str_k, (int *)options->value);
+				i = get_dict_ip(d, str_k, (int *)argps->options->value);
 				if(i == -1){
-					if(options->def_value){
-						*(int *)options->value = *(char *)options->def_value;
+					if(argps->options->def_value){
+						*(int *)argps->options->value = *(char *)argps->options->def_value;
 						return 1; // return 1 : no key/value in the dict, using the def_value
-					}else if(options->force == NO) 
+					}else if(argps->options->force == 1) 
 						return -1; // return -1: 	no key/value in the dict & no def_value.
 					else return 2;//return 2: the value is NULL 
 				}
 			} break;
 
 			case OPTION_INTEGER64:{
-				i = get_dict_int64(d, str_k, (int64 *)options->value);
+				i = get_dict_int64(d, str_k, (int64 *)argps->options->value);
 				if(i == -1){
-					if(options->def_value){
-						*(int64 *)options->value = *(int64 *)options->def_value;
+					if(argps->options->def_value){
+						*(int64 *)argps->options->value = *(int64 *)argps->options->def_value;
 						return 1; // return 1 : no key/value in the dict, using the def_value
 					
 					}
-					else if(options->force == NO) 
+					else if(argps->options->force == 1) 
 						return -1; // return -1: 	no key/value in the dict & no def_value.
 					else return 2;//return 2: the value is NULL 
 				}
